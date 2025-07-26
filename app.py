@@ -29,7 +29,7 @@ class Bottle:
         return len(self.data) == self.size
 
     def is_lock(self) -> bool:
-        return self.is_full() and len(set(self.data)) == 1
+        return self.size == 4 and self.is_full() and len(set(self.data)) == 1
 
     def space(self) -> int:
         return self.size - len(self.data)
@@ -41,18 +41,26 @@ class Bottle:
     def can_transfer_to(self, other: "Bottle") -> bool:
         if self.is_empty() or self.is_lock() or other.is_full():
             return False
-        return other.is_empty() or self.top() == other.top()
+
+        transfer_size = 0
+        for i in range(len(self.data)):
+            if self.data[i] == self.data[0]:
+                transfer_size = i + 1
+            else:
+                break
+        return transfer_size <= other.space() and (
+            other.is_empty() or other.data[0] == self.data[0]
+        )
 
     def transfer_to(self, other: "Bottle"):
         assert self.can_transfer_to(other)
 
-        self_available_size = 0
+        transfer_size = 0
         for i in range(len(self.data)):
             if self.data[i] == self.data[0]:
-                self_available_size = i + 1
+                transfer_size = i + 1
             else:
                 break
-        transfer_size = min(self_available_size, other.space())
         other.data = self.data[:transfer_size] + other.data
         self.data = self.data[transfer_size:]
 
@@ -132,6 +140,8 @@ def solve(
         print(f"bottles: {[str(b) for b in bottles]}")
         for b in bottles:
             BottlePrinter.print(b)
+        print(f"searched status size: {len(searched)}")
+        print(f"locked bottle size: {len([b for b in bottles if b.is_lock()])}")
 
     if status in searched:
         return False
