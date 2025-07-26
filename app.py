@@ -184,6 +184,6 @@ if __name__ == "__main__":
         Bottle([Color.ORANGE, Color.GRAY, Color.YELLOW, Color.TEAL], "3,1"),
         Bottle([Color.PINK, Color.CYAN, Color.CHARTREUSE, Color.GRAY], "3,2"),
         Bottle([Color.YELLOW, Color.ORANGE, Color.ORANGE, Color.GRAY], "3,3"),
-        Bottle([Color.PINK, Color.CYAN, Color.GREEN, Color.PINK], "3,4"),
+        Bottle([Color.PINK, Color.CYAN, Color.CHARTREUSE, Color.PINK], "3,4"),
     ]
     print(solve(bottles, [], set(), debug_mode=True))
